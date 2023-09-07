@@ -1,24 +1,21 @@
 import { Sequelize } from "sequelize"
 import dotenv from "dotenv"
-import User from "../models/users"
-import Client from "../models/clients"
+import * as users from '../models/users'
+import * as clients from '../models/clients'
+import * as products from '../models/products'
+import * as documents from '../models/documents'
 
-dotenv.config({path: './.env'})
+dotenv.config({ path: './.env' })
 let sequelize: Sequelize | null
-
 let mysqlConnection: any = null;
 
-// interface DatabaseModels {
-//     users?: typeof User; 
-//     clients?: typeof Client
-//   }
- 
-  
-let models: { [key: string]: any } = {};
-  //let models = {}
- function connect(databaseName: any, username: any, password: any) {
+
+
+const models: { [key: string]: any } = {};
+
+export function connect(databaseName: any, username: any, password: any) {
     return new Promise((resolve) => {
-         sequelize = new Sequelize(databaseName, username, password, {
+        sequelize = new Sequelize(databaseName, username, password, {
             dialect: 'mysql',
             //syncOnAssociation: true,
             pool: {
@@ -29,14 +26,15 @@ let models: { [key: string]: any } = {};
                 timestamps: false
             }
         })
-        // models.users = User.initModel();
-        // models.clients = Client.initModel()
-        models.users = sequelize.define('users', User.getSchema())
-        models.clients = sequelize.define('cleints', Client.getSchema()) 
+
+        models.users = sequelize.define('users', users.getSchema(), users.getTableName())
+        models.clients = sequelize.define('clients', clients.getSchema(models.users), clients.getTableName())
+        models.products = sequelize.define('products', products.getSchema(models.users), products.getTableName())
+        models.documents = sequelize.define('documents', documents.getSchema(models.users), documents.getTableName())
 
 
-        sequelize.sync({ alter: true }).then((resp) => {
-            mysqlConnection = resp;
+        sequelize.sync({ alter: false }).then((resp) => {
+            mysqlConnection = sequelize;
             console.log('Connected to Mysql');
             resolve(true);
         }).catch((error) => {
@@ -46,19 +44,16 @@ let models: { [key: string]: any } = {};
     })
 }
 
- function getModels () {
+
+export function getModels() {
     return models;
 };
- function mysqlconn() {
+export function mysqlconn() {
     return mysqlConnection;
 };
 
-export function getSequelize() {
-   
-    return sequelize;
-  }
 
- export function closeConn () {
+export function closeConn() {
     return new Promise((resolve) => {
         let conn = mysqlConnection.close();
         console.log("Connection closed successfully")
@@ -66,68 +61,10 @@ export function getSequelize() {
     })
 }
 
-module.exports = { connect, getModels, mysqlconn, closeConn, getSequelize }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const sequelize = new Sequelize(process.env.MYSQL_DB_NAME, process.env.MYSQL_DB_USERNAME, process.env.MYSQL_DB_PASSWORD, {
-//     host: 'localhost',
-//     dialect: 'mysql',
-//     pool : {
-//       max:10,
-//       min:0
-//     }
-//   });
-  
-//   async function connect() {
-//     try {
-//       await sequelize.authenticate();
-//       console.log('Connected to MySQL database');
-//       return true;
-//     } catch (error) {
-//       console.error('Failed to connect to MySQL database:', error);
-//       return false;
-//     }
-//   }
-  
-// //   function closeConnection() {
-// //     sequelize.close((err) => {
-// //       if (err) {
-// //         console.error('Error closing MySQL connection:', err);
-// //       } else {
-// //         console.log('MySQL connection closed.');
-// //       }
-// //       process.exit(); // Exit the Node.js application
-// //     });
-// //   }
-  
-//   module.exports = {
-//     connect,sequelize
-//   };
-
-  
 
 

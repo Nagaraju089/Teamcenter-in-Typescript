@@ -1,0 +1,45 @@
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
+//let connectObject;
+
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+  host: 'localhost',
+  dialect: 'mysql',
+  pool: {
+    max: 10,
+    min: 0
+  }
+});
+
+async function connect() {
+  try {
+    sequelize.sync({ alter: false }).then(() => {
+      //connectObject = sequelize;
+      console.log('Connected to MySQL database');
+      return true;
+    })
+  } catch (error) {
+    console.error('Failed to connect to MySQL database:', error);
+    return false;
+  }
+}
+
+function closeConnection() {
+  sequelize.close((err) => {
+    if (err) {
+      console.error('Error closing MySQL connection:', err);
+    } else {
+      console.log('MySQL connection closed.');
+    }
+    process.exit(); // Exit the Node.js application
+  });
+}
+function getmysqlconnection() {
+  return sequelize;
+}
+
+module.exports = {
+  connect,
+  sequelize, closeConnection, getmysqlconnection
+};

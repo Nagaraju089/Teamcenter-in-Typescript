@@ -1,14 +1,13 @@
-import express, {Router} from 'express'
-//const  userController = require('../controllers/userController')
+import express, { Router } from 'express'
 import * as user from '../controllers/userController'
-import * as auth from '../controllers/authController'
-import {upload} from '../utility/upload'
+import * as authController from '../controllers/authController'
+import { upload } from '../utility/upload'
 
 const router: Router = express.Router()
 
-router.get('/users', auth.protect, user.getUsers);
-router.patch('/users/add-photo', auth.protect, upload.single('photo'), user.updatePhoto);
-router.post('/addUser', auth.protect,user.generateUuid,  upload.single('photo'),  user.addUser);
-router.get('/users-details', auth.protect, user.userDetails);
+router.get('/users', authController.protect, authController.isAdmin, user.getUsers);
+router.patch('/users/add-photo', authController.protect, upload.single('photo'), user.updatePhoto);
+router.post('/addUser', authController.protect, authController.isAdmin, user.generateUuid, upload.single('photo'), user.addUser);
+router.get('/users-details', authController.protect, user.userDetails);
 
 export default router

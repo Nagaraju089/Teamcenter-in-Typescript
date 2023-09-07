@@ -9,6 +9,8 @@ declare namespace NodeJS {
     MYSQL_DB_USERNAME: string,
     MYSQL_DB_PASSWORD: string
 
+    MONGO_URL: string
+
       EMAIL_USERNAME: string
       EMAIL_PASSWORD: string
       EMAIL_FROM: string
@@ -20,11 +22,4 @@ declare namespace NodeJS {
       JWT_PAYLOAD: string
 
     }
-
-    interface newVariables {
-
-      file: any
-
-    }
-
   }

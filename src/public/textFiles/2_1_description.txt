@@ -1,0 +1,13 @@
+app.use({urlencoded})-->The app.use(express.urlencoded({ extended: false })) line of code is another middleware function used in Express.js applications. It enables URL-encoded form data parsing. The extended: false option specifies that the URL-encoded data should be parsed with the built-in querystring library.
+->{ limit: 100 } and { parameterLimit: 50 } are provided as options. These options limit the size of the URL-encoded form data and the number of parameters parsed, respectively.
+
+app.use(express.json())--> The app.use(express.json()) line of code is commonly used in Express.js applications to enable JSON body parsing. It is a middleware function that parses incoming request bodies with JSON payloads and makes the parsed data available on the req.body property.
+
+app.use(CORS)--> It is an example of Express.js middleware that sets the necessary headers for enabling Cross-Origin Resource Sharing (CORS) in your application. CORS allows web applications from different domains to make requests to your API.
+-> res.header("Access-Control-Allow-Origin", "*"): Sets the value of the Access-Control-Allow-Origin header to *, allowing requests from any origin. You can replace * with specific domain(s) if you want to restrict access to certain origins.
+
+-> res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT"): Sets the value of the Access-Control-Allow-Methods header to specify the allowed HTTP methods. In this case, GET, HEAD, OPTIONS, POST, and PUT methods are allowed. You can modify this list to fit your specific requirements.
+
+->res.header("Access-Control-Allow-Headers", "*"): Sets the value of the Access-Control-Allow-Headers header to allow any headers in the request. You can replace * with specific headers if you want to restrict access to certain headers.
+
+-> res.header('Access-Control-Allow-Credentials', true): Sets the value of the Access-Control-Allow-Credentials header to true. This allows credentials (e.g., cookies, HTTP authentication) to be sent in cross-origin requests. Modify this if you don't require credentials in your specific use case.
